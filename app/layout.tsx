@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import '../assets/styles/globals.css';
+
 
 const inter = Inter({ subsets: ['latin']});
 
 export const metadata: Metadata = {
   title: "Ecommerce",
+  description: 'Modern Ecommerce Platform'
 };
 
 export default function RootLayout({
