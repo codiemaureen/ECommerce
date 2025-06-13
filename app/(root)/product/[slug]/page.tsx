@@ -1,5 +1,6 @@
 import { getProductBySlug } from "@/lib/action/product.actions";
 import ProductPrice from "@/components/product/product-price";
+import ProductImages from "@/components/product/product-images";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,7 +19,7 @@ const ProductDetailsPage = async(props: {
    <div className="grid-grid-cols-1 md:grid-cols-5">
     {/* images column */}
     <div className="cols-span-2">
-
+     <ProductImages />
     </div>
     {/* datails column */}
      <div className="cols-span-2 p-5">
