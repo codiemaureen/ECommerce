@@ -58,7 +58,7 @@
     "zod": "^3.25.61"
   },
   "devDependencies": {
-    "@prisma/client": "^6.9.0",
+    "@prisma/client": "^6.10.0",
     "@tailwindcss/postcss": "^4.0.14",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.0",
