@@ -3,10 +3,12 @@
 import { signInFormSchema } from "../validators";
 import { signIn, signOut } from "@/auth";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
+import { AuthActionState } from "@/types";
+
 
 // sign in the user with credentials
 
-export async function signInWithCredentials(prevState: unknown, formData: FormData) {
+export async function signInWithCredentials(prevState: AuthActionState, formData: FormData) {
  try {
   const user = signInFormSchema.parse({
    email: formData.get('email'),

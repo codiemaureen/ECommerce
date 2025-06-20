@@ -8,3 +8,8 @@ export type Product = z.infer<typeof insertProductSchema> & {
  numReviews: number;
  createdAt: Date;
 }
+
+export type AuthActionState = {
+ success: boolean;
+ message: string;
+};
