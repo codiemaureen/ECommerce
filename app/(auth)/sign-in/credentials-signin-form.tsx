@@ -5,34 +5,60 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signInDefaultValues } from "@/lib/constants";
 import Link from "next/link";
+import { signInWithCredentials } from "@/lib/action/user.action";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 
 const CredentialsSignInForm = () => {
+ const [data, action] = useActionState(signInWithCredentials, {
+  success: false,
+  message: ''
+ });
+
+ const SignInButton = () => {
+  const {pending} = useFormStatus();
+
+  return (
+   <Button disabled={pending} className="w-full" variant="default">
+    {pending ? 'Signing In...' : 'Sign In'}
+   </Button>
+  )
+ }
  return ( 
-  <form>
-   <div className="space-y-4">
-    <Label htmlFor="email">Email</Label>
-    <Input 
-     id="email"
-     name="email"
-     type="email"
-     required
-     autoComplete="email"
-     defaultValue={signInDefaultValues.email}
-    />
-   </div>
-   <div className="space-y-4">
-    <Label htmlFor="password">Password</Label>
-    <Input 
-     id="password"
-     name="password"
-     type="password"
-     required
-     autoComplete="password"
-     defaultValue={signInDefaultValues.password}
-    />
-   </div>
+  <form action={action}>
+   <div className="space-y-6">
+    <div>
+     <Label htmlFor="email">Email</Label>
+     <Input 
+      id="email"
+      name="email"
+      type="email"
+      required
+      autoComplete="email"
+      defaultValue={signInDefaultValues.email}
+     />
+    </div>
+    <div>
+     <Label htmlFor="password">Password</Label>
+     <Input 
+      id="password"
+      name="password"
+      type="password"
+      required
+      autoComplete="password"
+      defaultValue={signInDefaultValues.password}
+     />
+    </div>
+    </div>
    <div>
-    <Button className="w-full">Sign In</Button>
+    <SignInButton />
+   </div>
+   <div >
+    {data && !data.success && (
+     <div className="text-center text-destrucive">
+      { data.message}
+     </div>
+    )}
    </div>
    <div className="text-sm text-center text-muted-foreground">
     Don&apos;t have an account?{' '}
