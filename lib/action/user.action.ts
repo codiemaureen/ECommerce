@@ -48,7 +48,8 @@ export async function signUpUser(prevState: unknown, formData: FormData){
    data: {
     name: user.name,
     email: user.email,
-    password: user.password
+    password: user.password,
+    role: 'User'
    }
   });
 
