@@ -52,7 +52,7 @@ export const cartItemSchema = z.object({
 
 const insertCartSchema = z.object({
   items: z.array(cartItemSchema),
-  itemsPrice: curren,
+  itemsPrice: currency,
   totalPrice: currency,
   shippingPrice: currency,
   taxPrice: currency,
