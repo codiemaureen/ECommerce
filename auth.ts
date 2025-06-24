@@ -6,55 +6,56 @@ import { compareSync } from 'bcrypt-ts-edge';
 import type { NextAuthConfig } from 'next-auth';
 
 export const config = {
- pages:{
-  signIn: '/sign-in',
-  error: '/sign-in'
- },
- session: {
-  strategy: 'jwt'as const,
-  maxAge: 30 * 24 * 60 * 60,
- },
- adapter: PrismaAdapter(prisma),
- providers: [
-  CredentialsProvider({
-   credentials:{
-    email: {type: 'email'},
-    password: {type: 'password'}
-   },
-   async authorize(credentials){
-    if(credentials === null){
-     return null;
-    }
-    const user = await prisma.user.findFirst({
-     where:{
-      email: credentials.email as string
-      }
-    });
+  pages:{
+    signIn: '/sign-in',
+    error: '/sign-in'
+  },
+  session: {
+    strategy: 'jwt'as const,
+    maxAge: 30 * 24 * 60 * 60,
+  },
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    CredentialsProvider({
+      credentials:{
+        email: {type: 'email'},
+        password: {type: 'password'}
+      },
+      async authorize(credentials){
+        if(credentials === null){
+          return null;
+        }
+        const user = await prisma.user.findFirst({
+        where:{
+          email: credentials.email as string
+        }
+        });
 
-    if(user && user.password){
-     const isMatch = compareSync(credentials.password as string, user.password);
+        if(user && user.password){
+        const isMatch = compareSync(credentials.password as string, user.password);
 
-     if(isMatch){
-      return{
-       id: user.id,
-       name: user.name,
-       email: user.email,
-       role: user.role
+        if(isMatch){
+          return{
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role
+          }
+        }
+        }
+        // if there is no user or the password do not match - return null
+        return null;
       }
-     }
-    }
-    // if there is no user or the password do not match - return null
-    return null;
-   }
-  })],
+    })
+  ],
   callbacks: {
-   async session({ session, user, trigger, token }: any) {
-    session.user.id = token.sub;
-    session.user.role = token.role;
-    session.user.name = token.name;
+    async session({ session, user, trigger, token }: any) {
+      session.user.id = token.sub;
+      session.user.role = token.role;
+      session.user.name = token.name;
 
     if(trigger === 'update') {
-     session.user.name = user.name;
+      session.user.name = user.name;
     }
     
     return session
