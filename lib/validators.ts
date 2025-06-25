@@ -50,7 +50,9 @@ export const cartItemSchema = z.object({
   price: currency
 })
 
-const insertCartSchema = z.object({
+
+//eslint disable next line
+export const insertCartSchema = z.object({
   items: z.array(cartItemSchema),
   itemsPrice: currency,
   totalPrice: currency,
