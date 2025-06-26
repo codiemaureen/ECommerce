@@ -12,9 +12,11 @@ export async function addItemToCart(data: CartItem){
   // check for cart cookie value
   const sessionCartId = (await cookies()).get('sessionCartId')?.value;
   if(!sessionCartId) throw new Error('Cart session not founds');
-
   const session = await auth();
+
+  // Get user ID
   const userId = session?.user?.id ? (session.user.id as string) : undefined;
+
   // get cart
   const cart = await getMyCart();
 
@@ -22,12 +24,10 @@ export async function addItemToCart(data: CartItem){
   const item = cartItemSchema.parse(data);
 
   // find product in database
-
   const product = await prisma.product.findFirst({
    where: {id: item.productID}
   });
 
-  console.log(product)
   return {
    success: true,
    message: 'Item added to cart'
