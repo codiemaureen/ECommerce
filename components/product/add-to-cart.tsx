@@ -2,44 +2,85 @@
 
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { CartItem } from "@/types";
-import { addItemToCart } from "@/lib/action/cart.actions";
+import { Cart, CartItem } from "@/types";
+import { addItemToCart, removeItemFromCart } from "@/lib/action/cart.actions";
 import { Button } from "../ui/button";
-import { Plus } from "lucide-react";
+import { Plus, Minus } from "lucide-react";
 
 
 
-const AddToCart = ({item}: {item: CartItem}) => {
- const router = useRouter();
+const AddToCart = ({cart, item}: {cart?: Cart, item: CartItem}) => {
+  const router = useRouter();
+  const handleAddToCart = async () => {
+    const res = await addItemToCart(item);
 
- const handleAddToCart = async () => {
-  const res = await addItemToCart(item);
+    if(!res.success){
+    return toast.error('Error adding item to cart')
+    }
 
-  if(!res.success){
-   return toast.error('Error adding item to cart')
+    return toast.success(`${res.message}`,
+    {
+      action: {
+      label: "Go to Cart",
+      onClick: () => {
+        router.push('/cart')
+      }
+      },
+      className: 'bg-primary text-white hover:bg-gray-800'
+    }
+    )
+  };
+
+  const handleRemoveFromCart = async () => {
+    const res = await removeItemFromCart(item.productID)
+    return res.success ? 
+    toast.success(`${res.message}`,
+      {
+        action: {
+        label: "Go to Cart",
+        onClick: () => {
+          router.push('/cart')
+        }
+        },
+        className: 'bg-primary text-white hover:bg-gray-800'
+      }
+    ) : toast.error(`${res.message}`,      
+      {
+        action: {
+        label: "Go to Cart",
+        onClick: () => {
+          router.push('/cart')
+        }
+        },
+        className: 'bg-primary text-white hover:bg-gray-800'
+      })
   }
-  return toast.success(`${res.message}`,
-   {
-    action: {
-     label: "Go to Cart",
-     onClick: () => {
-      router.push('/cart')
-     }
-    },
-    className: 'bg-primary text-white hover:bg-gray-800'
-   }
-  )
- }
 
- return (
-  <Button 
-   className="w-full" 
-   type="button" 
-   onClick={handleAddToCart}>
-    <Plus/> Add to Cart
-  </Button>
 
-   );
+  const existItem = cart && cart.items.find((x) => x.productID === item.productID);
+
+  return existItem ? (
+    <div>
+      <Button type='button' variant="outline" onClick={handleRemoveFromCart} className="cursor-pointer">
+        <Minus className="h-4 w-4"/>
+      </Button>
+      <span className="px-2">{existItem.qty}</span>
+      <Button 
+        className="cursor-pointer" 
+        type="button" 
+        onClick={handleAddToCart}>
+        <Plus className="h-4 w-4"/>
+      </Button>
+    </div>
+  ) : 
+  (
+    <Button 
+      className="w-full cursor-pointer" 
+      type="button" 
+      onClick={handleAddToCart}>
+        <Plus/> Add to Cart
+    </Button>
+  );
 }
- 
+
 export default AddToCart;
