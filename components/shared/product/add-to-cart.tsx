@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Cart, CartItem } from "@/types";
 import { addItemToCart, removeItemFromCart } from "@/lib/action/cart.actions";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { Plus, Minus } from "lucide-react";
 
 
