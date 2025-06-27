@@ -20,10 +20,10 @@ const AddToCart = ({cart, item}: {cart?: Cart, item: CartItem}) => {
       const res = await addItemToCart(item);
 
       if(!res.success){
-      return toast.error('Error adding item to cart')
+        toast.error('Error adding item to cart')
       }
   
-      return toast.success(`${res.message}`,
+      toast.success(`${res.message}`,
       {
         action: {
         label: "Go to Cart",
@@ -39,30 +39,32 @@ const AddToCart = ({cart, item}: {cart?: Cart, item: CartItem}) => {
 
   const handleRemoveFromCart = async () => {
     startTransition(async () => {
-      const res = await removeItemFromCart(item.productID)
-      return res.success ? 
-      toast.success(`${res.message}`,
-        {
+      const res = await removeItemFromCart(item.productID);
+  
+      if (res.success) {
+        toast.success(`${res.message}`, {
           action: {
-          label: "Go to Cart",
-          onClick: () => {
-            router.push('/cart')
-          }
+            label: "Go to Cart",
+            onClick: () => {
+              router.push('/cart');
+            }
           },
           className: 'bg-primary text-white hover:bg-gray-800'
-        }
-      ) : toast.error(`${res.message}`,      
-        {
+        });
+      } else {
+        toast.error(`${res.message}`, {
           action: {
-          label: "Go to Cart",
-          onClick: () => {
-            router.push('/cart')
-          }
+            label: "Go to Cart",
+            onClick: () => {
+              router.push('/cart');
+            }
           },
           className: 'bg-primary text-white hover:bg-gray-800'
-        })
-    })
-  }
+        });
+      }
+    });
+  };
+  
 
 
   const existItem = cart && cart.items.find((x) => x.productID === item.productID);
@@ -70,7 +72,7 @@ const AddToCart = ({cart, item}: {cart?: Cart, item: CartItem}) => {
   return existItem ? (
     <div>
       <Button type='button' variant="outline" onClick={handleRemoveFromCart} className="cursor-pointer">
-        {isPending ? (<Loader className="w-4 h-4" animate-spin/>) : (<Minus className="h-4 w-4"/>)}
+        {isPending ? (<Loader className="w-4 h-4" animate-spin />) : (<Minus className="h-4 w-4"/>)}
       </Button>
       <span className="px-2">{existItem.qty}</span>
       <Button 
