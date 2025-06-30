@@ -73,7 +73,7 @@ const AddToCart = ({cart, item}: {cart?: Cart, item: CartItem}) => {
     <div>
       <Button type='button' variant="outline" onClick={handleRemoveFromCart} className="cursor-pointer">
         {isPending 
-        ? (<Loader className="w-4 h-4" animate-spin />)
+        ? (<Loader className="w-4 h-4" animate-spin={true}/>)
         : (<Minus className="h-4 w-4"/>)}
       </Button>
       <span className="px-2">{existItem.qty}</span>
@@ -82,7 +82,7 @@ const AddToCart = ({cart, item}: {cart?: Cart, item: CartItem}) => {
         type="button" 
         onClick={handleAddToCart}>
           {isPending 
-          ? (<Loader className="w-4 h-4" animate-spin/>) 
+          ? (<Loader className="w-4 h-4" animate-spin={true}/>) 
           : (<Plus className="h-4 w-4"/>)}
       </Button>
     </div>
@@ -93,7 +93,7 @@ const AddToCart = ({cart, item}: {cart?: Cart, item: CartItem}) => {
       type="button" 
       onClick={handleAddToCart}>
         {isPending 
-        ? (<Loader className="w-4 h-4" animate-spin/>) 
+        ? (<Loader className="w-4 h-4" animate-spin={true}/>) 
         : (<Plus/>)}{' '} Add to Cart
     </Button>
   );
