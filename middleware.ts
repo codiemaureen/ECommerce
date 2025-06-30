@@ -1,1 +1,6 @@
-export { auth as middleware } from '@/auth';
+// middleware.ts
+export { middleware as default } from "./auth";
+
+export const config = {
+  matcher: ["/checkout"],
+};
