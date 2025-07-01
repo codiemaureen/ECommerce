@@ -30,7 +30,8 @@ const calcPrice = (items: CartItem[]) => {
 export async function addItemToCart(data: CartItem){
    try {
       // check for cart cookie value
-      const sessionCartId = (await cookies()).get('sessionCartId')?.value;
+      const cookieStore = await cookies();
+      const sessionCartId = cookieStore.get("sessionCartId")?.value;
       if(!sessionCartId) throw new Error('Cart session not founds');
       const session = await auth();
 
@@ -38,7 +39,7 @@ export async function addItemToCart(data: CartItem){
       const userId = session?.user?.id ? (session.user.id as string) : undefined;
 
       // get cart
-      const cart = await getMyCart();
+      const cart = await getMyCart(sessionCartId);
 
       // parse and validate item
       const item = cartItemSchema.parse(data);
@@ -123,13 +124,12 @@ export async function addItemToCart(data: CartItem){
    }
 }
 
-export async function getMyCart(){
+export async function getMyCart(sessionCartId?: string){
    // check for cart cookie value
-   const sessionCartId = (await cookies()).get('sessionCartId')?.value;
    if(!sessionCartId) throw new Error('Cart session not founds');
 
    const session = await auth();
-   const userId = session?.user?.id ? (session.user.id as string) : undefined;
+   const userId = session?.user?.id;
 
    // get user cart from database
    const cart = await prisma.cart.findFirst({
@@ -152,7 +152,8 @@ export async function getMyCart(){
 export async function removeItemFromCart(productID: string){
    try {
          // check for cart cookie value
-   const sessionCartId = (await cookies()).get('sessionCartId')?.value;
+   const cookieStore = await cookies();
+   const sessionCartId = cookieStore.get("sessionCartId")?.value;
    if(!sessionCartId) throw new Error('Cart session not founds');
 
    // Get the Product
@@ -162,7 +163,7 @@ export async function removeItemFromCart(productID: string){
    if(!product) throw new Error('Product Not found');
 
    //Get User Cart
-   const cart = await getMyCart();
+   const cart = await getMyCart(sessionCartId);
    if(!cart) throw new Error('Cart not found');
 
    // Check if the cart has selected item

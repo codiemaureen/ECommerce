@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { getMyCart } from "@/lib/action/cart.actions";
-
+import { cookies } from "next/headers";
 
 
 const ProductDetailsPage = async(props: {
@@ -16,7 +16,11 @@ const ProductDetailsPage = async(props: {
   const {slug} = await props.params;
   const product = await getProductBySlug(slug);
   if(!product) return notFound();
-  const cart = await getMyCart();
+
+  const cookieStore =  await cookies();
+  const sessionCartId = cookieStore.get("sessionCartId")?.value;
+  const cart = await getMyCart(sessionCartId);
+
   return ( <>
     <section>
     <div className="grid-grid-cols-1 md:grid-cols-5">
