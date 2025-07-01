@@ -1,4 +1,4 @@
-// auth.config.ts
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthConfig } from "next-auth";
 
@@ -25,3 +25,9 @@ export const authConfig: NextAuthConfig = {
     },
   },
 };
+
+// For Edge Middleware
+export const { auth } = NextAuth(authConfig);
+
+// For server usage (like getServerSession)
+export const authSession = () => NextAuth(authConfig).auth;
