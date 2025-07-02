@@ -16,11 +16,9 @@ const fullConfig = {
       },
       async authorize(credentials) {
         if (!credentials) return null;
-
         const user = await prisma.user.findFirst({
           where: { email: credentials.email },
         });
-
         if (
           user &&
           user.password &&
@@ -33,11 +31,30 @@ const fullConfig = {
             role: user.role,
           };
         }
-
         return null;
       },
     }),
   ],
+  callbacks: {
+    async session({ session, token }: any) {
+      session.user.id = token.sub;
+      session.user.role = token.role;
+      session.user.name = token.name;
+      return session;
+    },
+    async jwt({ token, user }: any) {
+      if (user) {
+        token.id = user.id;
+        token.role = user.role;
+        token.name = user.name;
+      }
+      return token;
+    },
+  },
 };
 
-export const { auth, handlers, signIn, signOut } = NextAuth(fullConfig);
+// Edge middleware handler
+export const { auth: middlewareAuth, handlers, signIn, signOut } = NextAuth(fullConfig);
+
+// Server usage: session getter
+export const auth = () => NextAuth(fullConfig).auth();
