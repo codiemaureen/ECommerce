@@ -7,6 +7,7 @@ import { AuthActionState, ShippingAddress } from "@/types";
 import { hashSync } from "bcryptjs";
 import { prisma } from "@/db/prisma";
 import { formatError } from "../utils";
+import z from "zod";
 
 // sign in the user with credentials
 
