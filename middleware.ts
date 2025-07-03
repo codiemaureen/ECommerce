@@ -10,7 +10,7 @@ export async function middleware(req: NextRequest) {
   const isAuthenticated = !!token;
 
   //  Protect specific routes
-  const protectedPaths = ["/checkout", "/account"];
+  const protectedPaths = ["/shipping-address", "/payment-method", "/place-order", "/profile", "/user", "/order", "/admin"];
   const isProtected = protectedPaths.some((path) =>
     req.nextUrl.pathname.startsWith(path)
   );
@@ -33,5 +33,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/cart", "/checkout", "/account/:path*"],
+  matcher: ["/", "/cart", "/checkout", "/account/:path*", "/shipping-address", "/payment-method", "/place-order", "/profile", "/user", "/order", "/admin"],
 };
