@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "./db/prisma";
 import { compareSync } from "bcryptjs";
 import { authConfig } from "./auth.config";
+import { cookies } from "next/headers";
 
 const fullConfig = {
   ...authConfig,
@@ -24,6 +25,23 @@ const fullConfig = {
           user.password &&
           compareSync(credentials.password as string, user.password)
         ) {
+          const cookiesObject = await cookies();
+          const sessionCartId = cookiesObject.get('sessionCartId')?.value;
+      
+          if (sessionCartId) {
+            const sessionCart = await prisma.cart.findFirst({
+              where: { sessionCartId },
+            });
+      
+            if (sessionCart) {
+              await prisma.cart.deleteMany({ where: { userId: user.id } });
+      
+              await prisma.cart.update({
+                where: { id: sessionCart.id },
+                data: { userId: user.id },
+              });
+            }
+          }
           return {
             id: user.id,
             name: user.name,
@@ -47,10 +65,20 @@ const fullConfig = {
         token.id = user.id;
         token.role = user.role;
         token.name = user.name;
+    
+        if (user.name === 'NO_NAME') {
+          token.name = user.email!.split('@')[0];
+    
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { name: token.name },
+          });
+        }
       }
+    
       return token;
-    },
-  },
+    }
+  }
 };
 
 // Edge middleware handler
