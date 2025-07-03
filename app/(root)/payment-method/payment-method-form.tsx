@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { useTransition } from "react";
 import { Form } from "@/components/ui/form";
 import { paymentMethodSchema } from "@/lib/validators";
-import CheckoutSteps from "@/components/shared/checkout-steps";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DEFAULT_PAYMENT_METHOD } from "@/lib/constants";
@@ -21,9 +20,8 @@ const PaymentMethodForm = ({ preferredPaymentMethod }: {preferredPaymentMethod: 
   }
  })
  const [isPending, startTransition] = useTransition();
- 
+
  return ( <>
-  <CheckoutSteps current={2} />
   Form
  </> );
 }
