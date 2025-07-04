@@ -50,7 +50,7 @@ const ShippingAddressForm = ({address}: {address: ShippingAddress}) => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="flex flex-col md:flex-row gap-5">
             <FormField
-            control={form.control}
+              control={form.control}
               name="fullName"
               render={({ field }: {field: ControllerRenderProps<z.infer<typeof shippingAddressSchema>, 'fullName'>}) => (
                 <FormItem>
@@ -138,5 +138,5 @@ const ShippingAddressForm = ({address}: {address: ShippingAddress}) => {
     </div>
   </> );
 }
- 
+
 export default ShippingAddressForm;
