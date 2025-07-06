@@ -6,7 +6,7 @@ import { auth } from "@/auth";
 import { cookies } from "next/headers";
 import { ShippingAddress } from "@/types";
 import CheckoutSteps from "@/components/shared/checkout-steps";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
