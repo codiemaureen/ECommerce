@@ -1,19 +1,13 @@
 import { z } from 'zod';
-import { formatNumberWithDecimal } from './utils';
+// import { formatNumberWithDecimal } from './utils';
 import { PAYMENT_METHODS } from './constants';
-import { Decimal } from '@prisma/client/runtime/library';
 
-const currency = z
-  .string()
-  .refine((value) => /^\d+(\.\d{2})?$/.test(formatNumberWithDecimal(Number(value))), 'Price must have exactly two decimal places'
-);
-
-
-const decimalLike = z.union([
-  z.string().regex(/^\d+(\.\d+)?$/), // e.g. "12.99"
+const currency = z.union([
+  z.string().regex(/^\d+(\.\d{1,2})?$/), // optional decimal places
   z.number(),
-  z.custom<Decimal>((val) => val instanceof Decimal),
 ]);
+
+
 
 //schema for inserting products
 export const insertProductSchema = z.object({
@@ -92,16 +86,18 @@ export const paymentMethodSchema = z.object({
 export const insertOrderSchema = z.object({
   user: z.object({
     connect: z.object({
-      id: z.string().uuid(),
-    }),
+      id: z.string().uuid()
+    })
   }),
-  shippingAddress: shippingAddressSchema,
-  paymentMethod: z.string(),
-  itemsPrice: decimalLike,
-  shippingPrice: decimalLike,
-  taxPrice: decimalLike,
-  totalPrice: decimalLike,
-});
+  itemsPrice: currency,
+  shippingPrice: currency,
+  taxPrice: currency,
+  totalPrice: currency,
+  paymentMethod: z.string().refine((data) => PAYMENT_METHODS.includes(data), {
+    message: 'Invalid payment method'
+  }),
+  shippingAddress: shippingAddressSchema
+})
 
 // schema for inserting an order item
 export const insertOrderItemSchema = z.object({
