@@ -83,7 +83,11 @@ export const paymentMethodSchema = z.object({
 
 
 export const insertOrderSchema = z.object({
-  userId: z.string().min(1, 'User is required'),
+  user: z.object({
+    connect: z.object({
+      id: z.string().uuid(),
+    }),
+  }),
   itemsPrice: currency,
   shippingPrice: currency,
   taxPrice: currency,
