@@ -8,6 +8,12 @@ const currency = z
 );
 
 
+const decimalLike = z.union([
+  z.string().regex(/^\d+(\.\d+)?$/), // e.g. "12.99"
+  z.number(),
+  z.custom<Decimal>((val) => val instanceof Decimal),
+]);
+
 //schema for inserting products
 export const insertProductSchema = z.object({
  name: z.string().min(3, 'Name must be at least 3 characters'),
@@ -88,15 +94,13 @@ export const insertOrderSchema = z.object({
       id: z.string().uuid(),
     }),
   }),
-  itemsPrice: currency,
-  shippingPrice: currency,
-  taxPrice: currency,
-  totalPrice: currency,
-  paymentMethod: z.string().refine((data) => PAYMENT_METHODS.includes(data), {
-    message: 'Invalid payment method'
-  }),
-  shippingAddress: shippingAddressSchema
-})
+  shippingAddress: shippingAddressSchema,
+  paymentMethod: z.string(),
+  itemsPrice: decimalLike,
+  shippingPrice: decimalLike,
+  taxPrice: decimalLike,
+  totalPrice: decimalLike,
+});
 
 // schema for inserting an order item
 export const insertOrderItemSchema = z.object({

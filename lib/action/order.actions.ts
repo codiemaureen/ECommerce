@@ -48,7 +48,6 @@ export async function createOrder() {
       };
     }
 
-    // Create order object
     const order = insertOrderSchema.parse({
       user: {
         connect: {
@@ -57,11 +56,12 @@ export async function createOrder() {
       },
       shippingAddress: user.address as Prisma.InputJsonValue,
       paymentMethod: user.paymentMethod,
-      itemsPrice:  new Prisma.Decimal(cart.itemsPrice),
-      shippingPrice:  new Prisma.Decimal(cart.shippingPrice),
-      taxPrice:  new Prisma.Decimal(cart.taxPrice),
-      totalPrice:  new Prisma.Decimal(cart.totalPrice),
-    }) as Prisma.OrderCreateInput;;
+      itemsPrice: String(cart.itemsPrice),
+      shippingPrice: String(cart.shippingPrice),
+      taxPrice: String(cart.taxPrice),
+      totalPrice: String(cart.totalPrice),
+    }) as Prisma.OrderCreateInput;
+    
 
     // Create a transaction to create order and order items in database
     const insertedOrderId = await prisma.$transaction(async (tx) => {
