@@ -32,7 +32,7 @@ export async function addItemToCart(data: CartItem){
       // check for cart cookie value
       const cookieStore = await cookies();
       const sessionCartId = cookieStore.get("sessionCartId")?.value;
-      if(!sessionCartId) throw new Error('Cart session not founds');
+      if(!sessionCartId) throw new Error('Cart session not found');
       const session = await auth();
 
       // Get user ID
@@ -126,7 +126,7 @@ export async function addItemToCart(data: CartItem){
 
 export async function getMyCart(sessionCartId?: string){
    // check for cart cookie value
-   if(!sessionCartId) throw new Error('Cart session not founds');
+   if(!sessionCartId) throw new Error('Cart session not found');
 
    const session = await auth();
    const userId = session?.user?.id;
@@ -154,7 +154,7 @@ export async function removeItemFromCart(productID: string){
          // check for cart cookie value
    const cookieStore = await cookies();
    const sessionCartId = cookieStore.get("sessionCartId")?.value;
-   if(!sessionCartId) throw new Error('Cart session not founds');
+   if(!sessionCartId) throw new Error('Cart session not found');
 
    // Get the Product
    const product = await prisma.product.findFirst({
