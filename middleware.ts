@@ -6,11 +6,14 @@ export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
 
   // Get session token (JWT) — works in Edge
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const token = await getToken({ 
+    req, secret: process.env.NEXTAUTH_SECRET 
+  });
+  console.log(token);
   const isAuthenticated = !!token;
 
   //  Protect specific routes
-  const protectedPaths = ["/payment-method", "/place-order", "/profile", "/user", "/order", "/admin"];
+  const protectedPaths = ["/shipping-address", "/payment-method", "/place-order", "/profile", "/user", "/order", "/admin"];
   const isProtected = protectedPaths.some((path) =>
     req.nextUrl.pathname.startsWith(path)
   );
