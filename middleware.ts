@@ -6,10 +6,13 @@ export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
 
   // Get session token (JWT) — works in Edge
-  const token = await getToken({ 
-    req, 
+  const token = await getToken({
+    req,
     secret: process.env.NEXTAUTH_SECRET,
-    cookieName: "__Secure-authjs.session-token"
+    cookieName:
+      process.env.NODE_ENV === "production"
+        ? "__Secure-authjs.session-token"
+        : "authjs.session-token",
   });
   const isAuthenticated = !!token;
 
