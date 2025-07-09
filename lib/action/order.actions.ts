@@ -2,7 +2,6 @@
 
 import { auth } from '@/auth';
 import { convertToPlanObject, formatError } from '../utils';
-import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { getMyCart } from './cart.actions';
 import { cookies } from 'next/headers';
 import { getUserById } from './user.action';
