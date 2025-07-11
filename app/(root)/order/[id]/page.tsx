@@ -23,7 +23,7 @@ const OrderDetailPage = async (props: {
 
   return ( 
     <>
-      <OrderDetailsTable order={order as DisplayOrder} />
+      <OrderDetailsTable order={order as DisplayOrder} paypalClientId={process.env.PAYPAL_CLIENT_ID || 'sb'} />
     </>
     );
 }
