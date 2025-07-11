@@ -19,7 +19,6 @@ const OrderDetailPage = async (props: {
   const { id } = await props.params;
   
   const order = await getOrderById(id);
-  console.log(order);
   if(!order) notFound();
 
   return ( 
