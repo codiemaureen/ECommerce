@@ -2,7 +2,7 @@ import { getOrderById } from "@/lib/action/order.actions";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import OrderDetailsTable from "./order-details-table";
-import {  Order } from "@/types";
+import {  DisplayOrder } from "@/types";
 
 
 
@@ -23,7 +23,7 @@ const OrderDetailPage = async (props: {
 
   return ( 
     <>
-      <OrderDetailsTable order={order as Order} />
+      <OrderDetailsTable order={order as DisplayOrder} />
     </>
     );
 }
