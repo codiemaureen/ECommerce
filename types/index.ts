@@ -4,7 +4,8 @@ import { insertProductSchema,
          cartItemSchema, 
          shippingAddressSchema,
          insertOrderItemSchema,
-         insertOrderSchema} from "@/lib/validators";
+         insertOrderSchema,
+         paymentResultSchema} from "@/lib/validators";
 
 
 export type AuthActionState = {
@@ -23,27 +24,33 @@ export type Cart = z.infer<typeof insertCartSchema>;
 export type CartItem = z.infer<typeof cartItemSchema>;
 export type ShippingAddress = z.infer<typeof shippingAddressSchema>
 export type OrderItem = z.infer<typeof insertOrderItemSchema>
-export type Order = z.infer<typeof insertOrderSchema>
-
-
-export type DisplayOrder = {
- id: string;
- userId: string;
- shippingAddress: ShippingAddress;
- paymentMethod: string;
- paymentResult: boolean;
- itemsPrice: string;
- shippingPrice: string;
- taxPrice: string;
- totalPrice: string;
- isPaid: boolean;
- paidAt: Date | null;
- isDelivered: boolean;
- deliveredAt: Date | null;
- createdAt: Date;
- orderitems: OrderItem[];
- user: {
-   name: string;
-   email: string;
- };
-};
+export type Order = z.infer<typeof insertOrderSchema> & {
+  id: string,
+  createdAt: Date,
+  isPaid: boolean,
+  paidAt: Date | null;
+  isDelivered: boolean,
+  deliveredAt: Date | null;
+  orderitems: OrderItem[];
+  user: {name: string; email: string};
+}
+//  id: string;
+//  userId: string;
+//  shippingAddress: ShippingAddress;
+//  paymentMethod: string;
+//  paymentResult: boolean;
+//  itemsPrice: string;
+//  shippingPrice: string;
+//  taxPrice: string;
+//  totalPrice: string;
+//  isPaid: boolean;
+//  paidAt: Date | null;
+//  isDelivered: boolean;
+//  deliveredAt: Date | null;
+//  createdAt: Date;
+//  orderitems: OrderItem[];
+//  user: {
+//    name: string;
+//    email: string;
+//  };
+// };
