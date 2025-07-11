@@ -5,9 +5,9 @@ export const paypal = {};
 // generate paypal access token
 
 async function generateAccessToken(){
- const {PAYPAL_CLIENT_ID, PAYPAL_APP_SECERET} = process.env;
+ const {PAYPAL_CLIENT_ID, PAYPAL_APP_SECRET} = process.env;
 
- const auth = Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_APP_SECERET}`).toString('base64');
+ const auth = Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_APP_SECRET}`).toString('base64');
 
  const response = await fetch(`${base}/v1/oauth2/token`, {
   method: 'POST',
@@ -20,9 +20,11 @@ async function generateAccessToken(){
 
  if(response.ok){
   const jsonData = await response.json();
-  return jsonData.accessToken;
+  return jsonData.access_token;
  } else {
   const errorMessage = await response.text();
   throw new Error(errorMessage);
  }
 }
+
+export { generateAccessToken };
