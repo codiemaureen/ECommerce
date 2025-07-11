@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { formatNumberWithDecimal } from './utils';
 import { PAYMENT_METHODS } from './constants';
+import { stat } from 'fs';
 
 const currency = z
  .string()
@@ -106,4 +107,11 @@ export const insertOrderItemSchema = z.object({
   name: z.string(),
   price: currency,
   qty: z.number(),
+})
+
+export const paymentResultSchema = z.object({
+  id: z.string(),
+  stat: z.string(),
+  email_address: z.string(),
+  pricePaid: z.string(),
 })
