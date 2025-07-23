@@ -290,6 +290,6 @@ export async function getMyOrders({
 
   return {
     data,
-    totalPages: Math.ceil(dataCount / limit);
+    totalPages: Math.ceil(dataCount / limit)
   }
 }
