@@ -137,7 +137,7 @@ export async function updateUserPaymentMethod(data: z.infer<typeof paymentMethod
  }
 }
 
-export async function updateProfile(user: {name:string, email:string}){
+export async function updateProfile(user: {name?:string, email?:string}){
  try {
   const session = await auth();
   const currentUser = await prisma.user.findFirst({
