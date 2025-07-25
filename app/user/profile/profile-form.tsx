@@ -2,19 +2,20 @@
 
 import { updateProfileSchema } from "@/lib/validators";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { updateProfile } from "@/lib/action/user.action";
 
 
 const ProfileForm = () => {
  const {data: session, update} = useSession();
  const form = useForm<z.infer<typeof updateProfileSchema>>({
-  resolver: zodResolver(),
+  resolver: zodResolver(updateProfileSchema),
   defaultValues: {
    name: session?.user?.name?? '',
    email: session?.user?.email?? '',
@@ -22,8 +23,24 @@ const ProfileForm = () => {
   }
  });
 
- const onSubmit = () => {
-  return;
+ const onSubmit = async (values: z.infer<typeof updateProfileSchema>) => {
+  const res = await updateProfile(values);
+
+  if(!res.success){
+   return toast.error(res.message);
+  }
+  
+  const newSession = {
+   ...session,
+   user: {
+    ...session.user,
+    name: values.name
+   }
+  }
+
+  await update(newSession);
+  await getSession();
+  toast.success(res.message);
  }
  return ( <Form {...form}>
   <form className="flex flex-col gap-5" onSubmit={form.handleSubmit(onSubmit)}>
