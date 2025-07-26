@@ -54,30 +54,27 @@ const fullConfig = {
     }),
   ],
   callbacks: {
-    async session({ session, token }: any) {
-      session.user.id = token.sub;
-      session.user.role = token.role;
+    async session({ session, token }) {
+      session.user.id = token.id;
       session.user.name = token.name;
+      session.user.role = token.role;
       return session;
-    },
-    async jwt({ token, user }: any) {
+    }
+    ,
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
-        token.role = user.role;
         token.name = user.name;
-    
-        if (user.name === 'NO_NAME') {
-          token.name = user.email!.split('@')[0];
-    
-          await prisma.user.update({
-            where: { id: user.id },
-            data: { name: token.name },
-          });
-        }
+        token.role = user.role;
       }
-    
+
+      if (trigger === 'update' && session?.name) {
+        token.name = session.name;
+      }
+
       return token;
     }
+
   }
 };
 
