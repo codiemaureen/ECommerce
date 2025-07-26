@@ -3,6 +3,7 @@ import { APP_NAME } from "@/lib/constants";
 import Image from "next/image";
 import Link from "next/link";
 import MainNav from "./main-nav";
+import { SessionProvider } from "next-auth/react";
 
 
 export default function UserLayout({
@@ -26,7 +27,9 @@ export default function UserLayout({
 
    </div>
    <div className="flex-1 space-y-4 p-8 pt-6 container mx-auto">
-    {children}
+        <SessionProvider>
+          {children}
+        </SessionProvider>
    </div>
   </div>
   </>
