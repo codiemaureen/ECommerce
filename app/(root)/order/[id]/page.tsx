@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import OrderDetailsTable from "./order-details-table";
 import {  DisplayOrder } from "@/types";
+import { auth } from "@/auth";
 
 
 
@@ -15,7 +16,7 @@ const OrderDetailPage = async (props: {
     id:string
   }>
   }) => {
-
+  const session = await auth();
   const { id } = await props.params;
   
   const order = await getOrderById(id);
@@ -23,7 +24,10 @@ const OrderDetailPage = async (props: {
 
   return ( 
     <>
-      <OrderDetailsTable order={order as DisplayOrder} paypalClientId={process.env.PAYPAL_CLIENT_ID || 'sb'} />
+      <OrderDetailsTable 
+        order={order as DisplayOrder} 
+        paypalClientId={process.env.PAYPAL_CLIENT_ID || 'sb'} 
+        isAdmin={session?.user?.role === 'admin' || false}/>
     </>
     );
 }
