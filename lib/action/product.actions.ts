@@ -1,7 +1,8 @@
 'use server';
 import { prisma } from "@/db/prisma";
-import { convertToPlanObject } from "../utils";
+import { convertToPlanObject, formatError } from "../utils";
 import { LATEST_PRODUCTS_LIMIT, PAGE_SIZE } from "../constants";
+import { revalidatePath } from "next/cache";
 
 export async function getLatestProducts(){
 
@@ -40,5 +41,40 @@ export async function getAllProducts({
  return{
   data,
   totalPages: Math.ceil(dataCount / limit)
+ }
+}
+
+// Delete a product
+export async function deleteProduct(id: string){
+ try {
+  const productExists = await prisma.product.findFirst({
+   where: {id}
+  })
+
+  if(!productExists) throw new Error('Product is not found');
+    const orderItemCount = await prisma.orderItem.count({
+   where: { productId: id }
+  });
+
+  if (orderItemCount > 0) {
+   throw new Error('Cannot delete product: It is associated with existing orders.');
+  }
+  
+  await prisma.product.delete({
+   where: {id}
+  });
+
+  revalidatePath('/admin/products');
+
+  return {
+   success: true,
+   message: 'Product deleted successfully'
+  }
+ } catch (error) {
+  console.log(formatError(error))
+  return {
+   success: false,
+   message: formatError(error)
+  }
  }
 }
