@@ -22,6 +22,13 @@ export async function getProductBySlug(slug: string){
  })
 }
 
+export async function getProductById(productId: string){
+ const data = await prisma.product.findFirst({
+  where: {id: productId},
+ });
+ return convertToPlanObject(data);
+}
+
 // Get all products
 export async function getAllProducts({
  query,
