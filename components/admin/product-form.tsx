@@ -180,8 +180,15 @@ const ProductForm = ({type, product, productId}: {
                     <CardContent className="space-y-2 mt-2 m-h-48">
                       <div className="flex-start space-x-2">
                         {images.map((image: string) => (
-                          <Image key={image} src={image} alt="product image" className="w-20 h-20 object-center rounded-sm" width={100} height={100}/>
-                        ))}
+                              <Image
+                                key={image}
+                                src={image}
+                                alt='product image'
+                                className='w-20 h-20 object-cover object-center rounded-sm'
+                                width={100}
+                                height={100}
+                              />
+                            ))}
                         <FormControl>
                           <UploadButton endpoint='imageUploader' onClientUploadComplete={(res: {url: string}[]) => {
                             form.setValue('images', [...images, res[0].url])
