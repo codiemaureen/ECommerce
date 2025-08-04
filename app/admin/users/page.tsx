@@ -44,7 +44,7 @@ const AdminUserPage = async (props: {
                <TableCell>{user.role === 'user' ? (<Badge variant='secondary'>User</Badge>) : (<Badge variant='default'>Admin</Badge>)}</TableCell>
                <TableCell className="text-center">
                 <Button asChild variant="outline" size="sm">
-                 <Link href={`admin/users/${user.id}`}>Edit</Link>
+                 <Link href={`/admin/users/${user.id}`}>Edit</Link>
                 </Button>
                 <DeleteDialog id={user.id} action={deleteUser}/>
                </TableCell>
