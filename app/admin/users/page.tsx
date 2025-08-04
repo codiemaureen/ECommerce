@@ -13,13 +13,13 @@ export const metadata: Metadata = {
 }
 
 const AdminUserPage = async (props: {
- searchParams: Promise<{
-  page: string;
- }>
-}) => {
- const {page = 1} = await props.searchParams;
- const users = await getAllUsers({ page: Number(page)});
- return ( 
+  searchParams: Promise<{
+    page: string;
+  }>
+  }) => {
+  const {page = 1} = await props.searchParams;
+  const users = await getAllUsers({ page: Number(page)});
+  return ( 
     <div className="space-y-2">
       <h2 className="h2-bold">
         Orders
@@ -38,16 +38,16 @@ const AdminUserPage = async (props: {
           <TableBody>
             {users.data.map((user) => (
               <TableRow key={user.id}>
-               <TableCell>{formatId(user.id)}</TableCell>
-               <TableCell>{user.name}</TableCell>
-               <TableCell>{user.email}</TableCell>
-               <TableCell>{user.role === 'user' ? (<Badge variant='secondary'>User</Badge>) : (<Badge variant='default'>Admin</Badge>)}</TableCell>
-               <TableCell className="text-center">
-                <Button asChild variant="outline" size="sm">
-                 <Link href={`/admin/users/${user.id}`}>Edit</Link>
-                </Button>
-                <DeleteDialog id={user.id} action={deleteUser}/>
-               </TableCell>
+                <TableCell>{formatId(user.id)}</TableCell>
+                <TableCell>{user.name}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>{user.role === 'user' ? (<Badge variant='secondary'>User</Badge>) : (<Badge variant='default'>Admin</Badge>)}</TableCell>
+                <TableCell className="text-center">
+                  <Button asChild variant="outline" size="sm">
+                  <Link href={`/admin/users/${user.id}`}>Edit</Link>
+                  </Button>
+                  <DeleteDialog id={user.id} action={deleteUser}/>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
