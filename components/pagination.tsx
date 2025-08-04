@@ -10,7 +10,7 @@ type PaginationProps = {
 }
 
 const Pagination = ({page, totalPages, urlParamName}: PaginationProps) => {
- const router =useRouter();
+ const router = useRouter();
  const searchParams = useSearchParams();
 
  const handleClick = (btnType: string) => {
