@@ -3,7 +3,7 @@ import DeleteDialog from "@/components/shared/delete-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { getAllUsers } from "@/lib/action/user.action";
+import { deleteUser, getAllUsers } from "@/lib/action/user.action";
 import { formatId } from "@/lib/utils";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -32,6 +32,7 @@ const AdminUserPage = async (props: {
               <TableHead>NAME</TableHead>
               <TableHead>EMAIL</TableHead>
               <TableHead>ROLE</TableHead>
+              <TableHead className="text-center">ACTIONS</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -41,12 +42,12 @@ const AdminUserPage = async (props: {
                <TableCell>{user.name}</TableCell>
                <TableCell>{user.email}</TableCell>
                <TableCell>{user.role === 'user' ? (<Badge variant='secondary'>User</Badge>) : (<Badge variant='default'>Admin</Badge>)}</TableCell>
-               <TableCell>
+               <TableCell className="text-center">
                 <Button asChild variant="outline" size="sm">
                  <Link href={`admin/users/${user.id}`}>Edit</Link>
                 </Button>
+                <DeleteDialog id={user.id} action={deleteUser}/>
                </TableCell>
-               {/* <DeleteDialog id={user.id} action={deleteOrder}/> */}
               </TableRow>
             ))}
           </TableBody>
