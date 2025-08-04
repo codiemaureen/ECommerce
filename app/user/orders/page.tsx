@@ -18,7 +18,9 @@ const OrdersPage = async(props: {
 
   const orders = await getMyOrders({
     page: Number(page) || 1
-  })
+  });
+
+  console.log(orders.totalPages)
   return ( 
     <div className="space-y-2">
       <h2 className="h2-bold">
@@ -53,7 +55,7 @@ const OrdersPage = async(props: {
             ))}
           </TableBody>
         </Table>
-        {orders.totalPages >= 1 && (
+        {orders.totalPages > 1 && (
           <Pagination page={Number(page) || 1} totalPages={orders.totalPages}/> 
         )}
       </div>
