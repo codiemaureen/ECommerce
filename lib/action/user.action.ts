@@ -9,6 +9,7 @@ import { prisma } from "@/db/prisma";
 import { formatError } from "../utils";
 import z from "zod";
 import { PAGE_SIZE } from "../constants";
+import { revalidatePath } from "next/cache";
 
 // sign in the user with credentials
 
@@ -188,5 +189,22 @@ export async function getAllUsers({
  return {
   data,
   totalPages: Math.ceil(dataCount / limit)
+ }
+}
+
+// Delete user
+export async function deleteUser(id: string) {
+ try {
+  await prisma.user.delete({
+   where: {id}
+  });
+
+  revalidatePath('/admin/users');
+  
+ } catch (error) {
+  return {
+   success: false,
+   message: formatError(error)
+  }
  }
 }
