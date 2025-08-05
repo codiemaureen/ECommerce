@@ -12,7 +12,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { USER_ROLES } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { updateUser } from "@/lib/action/user.action";
-import { formatError } from "@/lib/utils";
 
 
 const UpdateUserForm = ({user} : {
