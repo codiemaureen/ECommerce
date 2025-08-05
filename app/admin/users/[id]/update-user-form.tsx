@@ -11,22 +11,42 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { USER_ROLES } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
+import { updateUser } from "@/lib/action/user.action";
+import { formatError } from "@/lib/utils";
+
 
 const UpdateUserForm = ({user} : {
  user: z.infer<typeof updateUserSchema>
 }) => {
+ const router = useRouter()
  const form = useForm<z.infer<typeof updateUserSchema>>({
   resolver: zodResolver(updateUserSchema),
   defaultValues: user
  });
 
- const submitHandler = () => {
-  return;
+ const onSubmit = async (values: z.infer<typeof updateUserSchema>) => {
+  try {
+   const res = await updateUser({
+    ...values,
+    id: user.id
+   })
+
+   if(!res.success) toast.error(res.message);
+
+   toast.success(res.message);
+
+   form.reset();
+
+   router.push('/admin/users');
+
+  } catch (error) {
+   toast.error(error.message)
+  }
  }
 
  return ( 
    <Form {...form}>
-    <form method="POST" onSubmit={form.handleSubmit(submitHandler)}>
+    <form method="POST" onSubmit={form.handleSubmit(onSubmit)}>
      {/* email */}
       <div className="flex flex-col md:flex-row gap-5 items-start py-2">
           <FormField
