@@ -1,5 +1,4 @@
 import { getUserById } from "@/lib/action/user.action";
-import { formatId } from "@/lib/utils";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import UpdateUserForm from "./update-user-form";
