@@ -14,11 +14,11 @@ import Pagination from '@/components/pagination';
 import DeleteDialog from '@/components/shared/delete-dialog';
 import { requireAdmin } from '@/lib/auth-guard';
 
-const AdminProductsPage = async ({
-  searchParams,
-}: {
+interface PageProps {
   searchParams: { [key: string]: string | string[] | undefined };
-}) => {
+}
+
+const AdminProductsPage = async ({ searchParams }: PageProps) => {
   await requireAdmin();
 
   const page = Number(searchParams.page) || 1;
