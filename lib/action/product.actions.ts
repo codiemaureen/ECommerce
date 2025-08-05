@@ -31,29 +31,51 @@ export async function getProductById(productId: string){
 
 // Get all products
 export async function getAllProducts({
- query,
- limit = PAGE_SIZE,
- page,
- category
+  query,
+  limit = PAGE_SIZE,
+  page,
+  category,
+  price,
+  rating,
+  sort,
 }: {
- query: string;
- limit?: number;
- page: number;
- category?: string;
-}){
- const data = await prisma.product.findMany({
-  orderBy: { createdAt: 'desc'},
-  skip: (page - 1) * limit,
-  take: limit
- })
+  query: string;
+  limit?: number;
+  page: number;
+  category?: string;
+  price?: string;
+  rating?: string;
+  sort?: string;
+}) {
+  // Query filter
+  const queryFilter: Prisma.ProductWhereInput =
+    query && query !== 'all'
+      ? {
+          name: {
+            contains: query,
+            mode: 'insensitive',
+          } as Prisma.StringFilter,
+        }
+      : {};
 
- const dataCount = await prisma.product.count();
+  const data = await prisma.product.findMany({
+    where: {
+      ...queryFilter,
+    },
+    orderBy: { createdAt: 'desc' },
+    skip: (page - 1) * limit,
+    take: limit,
+  });
 
- return{
-  data,
-  totalPages: Math.ceil(dataCount / limit)
- }
+  const dataCount = await prisma.product.count();
+
+  return {
+    data,
+    totalPages: Math.ceil(dataCount / limit),
+  };
 }
+
+
 
 // Delete a product
 export async function deleteProduct(id: string){
