@@ -17,11 +17,7 @@ import { requireAdmin } from '@/lib/auth-guard';
 const AdminProductsPage = async ({
   searchParams,
 }: {
-  searchParams: {
-    page?: string;
-    query?: string;
-    category?: string;
-  };
+  searchParams: { [key: string]: string | string[] | undefined };
 }) => {
   await requireAdmin();
 
