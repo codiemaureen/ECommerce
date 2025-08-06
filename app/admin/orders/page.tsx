@@ -26,6 +26,9 @@ const AdminOrdersPage = async (props: {
 
   return ( 
     <div className="space-y-2">
+      <h2 className="h2-bold">
+        Orders
+      </h2>
       {searchText && (
         <div>
           Filtered by <i>&quot;{searchText}&quot;</i>{' '}
