@@ -172,8 +172,7 @@ export async function createProduct(data: z.infer<typeof insertProductSchema>) {
 // update a product
 export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
   try {
-
-   const product = updateProductSchema.parse(data);
+    const product = updateProductSchema.parse(data);
 
     const productExists = await prisma.product.findFirst({
       where: {id: product.id}
@@ -182,23 +181,23 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
     if(!productExists) throw new Error('Product not found')
     
     await prisma.product.update({
-     where: {id: product.id},
-     data: product
+    where: {id: product.id},
+    data: product
     })
 
     revalidatePath('/admin/products');
     
     return {
-     success: true,
-     message: 'Product updated successfully'
+    success: true,
+    message: 'Product updated successfully'
     }
 
- } catch (error) {
-  return {
-   success: false,
-   message: formatError(error)
+  } catch (error) {
+    return {
+    success: false,
+    message: formatError(error)
+    }
   }
- }
 } 
 
 // Get all categories
@@ -208,4 +207,15 @@ export async function getAllCategories(){
     _count: true
   })
   return data; 
+}
+
+// Get featured products
+export async function getFeaturedProducts(){
+  const data = await prisma.product.findMany({
+    where: {isFeatured: true},
+    orderBy: {createdAt: 'desc'},
+    take: 4
+  })
+
+  return convertToPlanObject(data);
 }
