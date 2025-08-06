@@ -114,37 +114,37 @@ export async function getAllProducts({
 
 // Delete a product
 export async function deleteProduct(id: string){
- try {
-  const productExists = await prisma.product.findFirst({
-   where: {id}
-  })
+  try {
+    const productExists = await prisma.product.findFirst({
+    where: {id}
+    })
 
-  if(!productExists) throw new Error('Product is not found');
-    const orderItemCount = await prisma.orderItem.count({
-   where: { productId: id }
-  });
+    if(!productExists) throw new Error('Product is not found');
+      const orderItemCount = await prisma.orderItem.count({
+    where: { productId: id }
+    });
 
-  if (orderItemCount > 0) {
-   throw new Error('Cannot delete product: It is associated with existing orders.');
+    if (orderItemCount > 0) {
+    throw new Error('Cannot delete product: It is associated with existing orders.');
+    }
+
+    await prisma.product.delete({
+    where: {id}
+    });
+
+    revalidatePath('/admin/products');
+
+    return {
+    success: true,
+    message: 'Product deleted successfully'
+    }
+  } catch (error) {
+    console.log(formatError(error))
+    return {
+    success: false,
+    message: formatError(error)
+    }
   }
-
-  await prisma.product.delete({
-   where: {id}
-  });
-
-  revalidatePath('/admin/products');
-
-  return {
-   success: true,
-   message: 'Product deleted successfully'
-  }
- } catch (error) {
-  console.log(formatError(error))
-  return {
-   success: false,
-   message: formatError(error)
-  }
- }
 }
 
 // create a product
