@@ -17,8 +17,10 @@ const ReviewList = ({userId, productId, productSlug}: {
 }) => {
   const [reviews, setReviews] = useState<Review[]>([]);
 
-  const reload = () =>  {
-  console.log(`reloading`);
+  // Reload reviews after created or updated
+  const reload = async () =>  {
+    const res = await getReviews({productId});
+    setReviews([...res.data]);
   };
 
     useEffect(() => {
