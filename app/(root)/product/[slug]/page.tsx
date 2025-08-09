@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { getMyCart } from "@/lib/action/cart.actions";
 import { cookies } from "next/headers";
+import ReviewList from "./review-list";
+import { auth } from "@/auth";
 
 
 const ProductDetailsPage = async(props: {
@@ -17,6 +19,9 @@ const ProductDetailsPage = async(props: {
   const product = await getProductBySlug(slug);
   if(!product) return notFound();
 
+  const session = await auth();
+  const userId = session?.user?.id;
+  
   const cookieStore =  await cookies();
   const sessionCartId = cookieStore.get("sessionCartId")?.value;
   const cart = await getMyCart(sessionCartId);
@@ -80,6 +85,14 @@ const ProductDetailsPage = async(props: {
         </CardContent>
       </Card>
     </div>
+    </section>
+    <section className="mt-10">
+      <h2 className="h2-bold">
+        <ReviewList
+          userId={userId || ''}
+          productId={product.id}
+          productSlug={product.slug} />
+      </h2>
     </section>
   </> );
 }
