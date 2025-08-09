@@ -9,6 +9,7 @@ import { getMyCart } from "@/lib/action/cart.actions";
 import { cookies } from "next/headers";
 import ReviewList from "./review-list";
 import { auth } from "@/auth";
+import Rating from "@/components/shared/product/rating";
 
 
 const ProductDetailsPage = async(props: {
@@ -38,7 +39,8 @@ const ProductDetailsPage = async(props: {
         <div className="flex-flex-col gap-6">
         <p>{product.brand} {product.category}</p>
         <h1 className="h3-bold">{product.name}</h1>
-        <p>{product.rating} of {product.numReviews} Reviews</p>
+        <Rating value={Number(product.rating)} />
+        <p>{product.numReviews}</p>
         <div className="flex flex-col sm:flex-row sm:items-center gap-3">
           <ProductPrice 
           className="w-24 rounded-full bg-green-100 text-green-700 px-5 py-2"
