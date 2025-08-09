@@ -17,6 +17,7 @@ import {
 import { createPayPalOrder, approvePayPalOrder, updateOrderToPaidCOD, deliverOrder } from "@/lib/action/order.actions";
 import { toast } from "sonner";
 import { useTransition } from "react";
+import StripePayment from "./stripe-payment";
 
 export type Order = PrismaOrder & {
   shippingAddress: ShippingAddress;
@@ -24,7 +25,7 @@ export type Order = PrismaOrder & {
   user: Pick<User, "name" | "email">;
 };
 
-const OrderDetailsTable = ({ order, paypalClientId, isAdmin }: {order:  DisplayOrder, paypalClientId: string, isAdmin: boolean}) => {
+const OrderDetailsTable = ({ order, paypalClientId, isAdmin, stripeClientSecret }: {order:  DisplayOrder, paypalClientId: string, isAdmin: boolean, stripeClientSecret: string | null}) => {
   const {
     id,
     shippingAddress,
@@ -209,6 +210,15 @@ const OrderDetailsTable = ({ order, paypalClientId, isAdmin }: {order:  DisplayO
                 </PayPalScriptProvider>
               </div>
             )}
+            {/* Stripe Payment */}
+            {
+              !isPaid && paymentMethod === 'Stripe' && stripeClientSecret && (
+                <StripePayment
+                  priceInCents={Number(order.totalPrice) * 100}
+                  orderId={order.id}
+                  clientSecret={stripeClientSecret} />
+              )
+            }
             {/* Cash on Delivery */}
             { isAdmin && !isPaid && paymentMethod === 'CashOnDelivery' && (
               <MarkAsPaidButton />
