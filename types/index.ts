@@ -29,11 +29,12 @@ export type ShippingAddress = z.infer<typeof shippingAddressSchema>
 export type OrderItem = z.infer<typeof insertOrderItemSchema>
 export type Order = z.infer<typeof insertOrderSchema> 
 export type PaymentResult = z.infer<typeof paymentResultSchema>
-export type Review = z.infer<typeof insertReviewSchema & {
+export type ReviewInput = z.infer<typeof insertReviewSchema>
+export type Review = ReviewInput & {
   id: string;
   createdAt: Date;
   user?: {name: string}
-}>
+}
 
 export type DisplayOrder = {
   id: string;
