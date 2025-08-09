@@ -130,7 +130,7 @@ model Review {
   id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId             String   @db.Uuid
   productId          String   @db.Uuid
-  rating             String   @db.Uuid
+  rating             Int
   title              String
   description        String
   isVerifiedPurchase Boolean  @default(true)
