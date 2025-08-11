@@ -8,10 +8,11 @@ import { getUserById } from './user.action';
 import { insertOrderSchema } from '../validators';
 import { prisma } from '@/db/prisma';
 import { Prisma } from '@prisma/client';
-import { CartItem, PaymentResult } from '@/types';
+import { CartItem, PaymentResult, ShippingAddress } from '@/types';
 import { paypal } from '../paypal';
 import { revalidatePath } from 'next/cache';
 import { PAGE_SIZE } from '../constants';
+import { sendPurhaseReceipt } from '@/email';
 
 
 // Create order and create the order items
@@ -262,7 +263,13 @@ export async function updateOrderToPaid({
       user: { select: {name:true, email: true}}
     }
   })
-  if(!updatedOrder) throw new Error('Order not found')
+  if(!updatedOrder) throw new Error('Order not found');
+
+  sendPurhaseReceipt({order: {
+    ...updatedOrder,
+    shippingAddress: updatedOrder.shippingAddress as ShippingAddress,
+    paymentResult: updatedOrder.paymentResult as PaymentResult,
+  }});
 }
 
 //Get User Orders
